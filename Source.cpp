@@ -6,13 +6,11 @@
 using namespace std;
 using json = nlohmann::json;
 
-// Функція для обробки відповіді від cURL
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* output) {
     output->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
 
-// Функція для виконання GET-запиту
 string HttpGet(const string& url) {
     CURL* curl = curl_easy_init();
     string response;
@@ -22,7 +20,6 @@ string HttpGet(const string& url) {
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
-        // Встановлюємо заголовки
         struct curl_slist* headers = NULL;
         headers = curl_slist_append(headers, "Accept: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -39,7 +36,6 @@ string HttpGet(const string& url) {
     return response;
 }
 
-// Функція для отримання гороскопу
 void GetHoroscope(const string& sign, const string& day) {
     string url = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=" + sign + "&day=" + day;
     string response = HttpGet(url);
